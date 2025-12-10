@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Liquid Music</title>
-    <link rel="stylesheet" href="style.css?v=7">
+    <link rel="stylesheet" href="style.css?v=37">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -24,7 +24,7 @@
         <main class="main-content">
             <header class="app-header">
                 <div class="logo">
-                    <i class="fa-solid fa-music"></i> <span>Liquid<span class="highlight">Beats</span></span>
+                    <span class="highlight">Liquid</span> Music 🎵
                 </div>
             </header>
 
@@ -39,6 +39,20 @@
         <!-- Sidebar / Filter Panel (Right Side) -->
         <aside class="sidebar glass-panel">
             <div class="filter-section">
+                <div class="filter-group" style="margin-bottom: 30px;">
+                    <h3>Appearance</h3>
+                    <div style="margin-top: 15px;">
+                        <label>Theme</label>
+                        <select id="theme-selector">
+                            <option value="default">Default (Neon)</option>
+                            <option value="ocean">Ocean Breeze</option>
+                            <option value="sunset">Sunset Vibes</option>
+                            <option value="forest">Mystic Forest</option>
+                            <option value="gold">Luxury Gold</option>
+                        </select>
+                    </div>
+                </div>
+
                 <h3>Filters <button id="reset-filters" class="icon-btn" title="Reset Filters"><i
                             class="fa-solid fa-rotate-right"></i></button></h3>
                 <div class="filter-group">
@@ -119,6 +133,27 @@
         <div class="modal-content glass-panel">
             <span class="close-modal">&times;</span>
             <div id="yt-player-container"></div>
+        </div>
+    </div>
+
+    <!-- Video Modal -->
+    <div id="video-modal" class="modal-overlay">
+        <div class="modal-content glass-panel">
+            <button id="close-modal" class="icon-btn close-btn"><i class="fa-solid fa-xmark"></i></button>
+            <div class="video-container">
+                <!-- Thumbnail Image (Standard YouTube Quality) -->
+                <img id="video-thumbnail" src="" alt="Video Thumbnail">
+                <!-- Play Icon Overlay -->
+                <div class="play-overlay" id="thumbnail-play-btn">
+                    <i class="fa-brands fa-youtube"
+                        style="font-size: 64px; color: #ff0000; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5));"></i>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a id="youtube-fallback" href="#" target="_blank" class="fallback-link">
+                    <span>Watch on YouTube <i class="fa-solid fa-arrow-up-right-from-square"></i></span>
+                </a>
+            </div>
         </div>
     </div>
 

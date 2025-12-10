@@ -1,6 +1,6 @@
 // Remote Data Utilities
-const FILTERS_URL = 'https://cdn.jsdelivr.net/gh/luffytaroOnePiece/gists@main/music/filters.json';
-const METADATA_URL = 'https://cdn.jsdelivr.net/gh/luffytaroOnePiece/gists@main/music/metadata.json';
+const FILTERS_URL = 'https://cdn.jsdelivr.net/gh/luffytaroOnePiece/gists@latest/music/filters.json';
+const METADATA_URL = 'https://cdn.jsdelivr.net/gh/luffytaroOnePiece/gists@latest/music/metadata.json';
 
 // DOM Elements
 const songsGrid = document.getElementById('songs-grid');
@@ -10,11 +10,17 @@ const filterYear = document.getElementById('filter-year');
 const filterSinger = document.getElementById('filter-singer');
 const filterMusicBy = document.getElementById('filter-musicBy');
 const resetBtn = document.getElementById('reset-filters');
+const themeSelector = document.getElementById('theme-selector');
 
 const nowPlayingSection = document.querySelector('.now-playing');
 const currentCover = document.getElementById('current-cover');
 const defaultCoverIcon = document.getElementById('default-cover-icon');
 const currentTitle = document.getElementById('current-title');
+
+const videoModal = document.getElementById('video-modal');
+const videoThumbnail = document.getElementById('video-thumbnail');
+const thumbnailPlayBtn = document.getElementById('thumbnail-play-btn');
+const closeModalBtn = document.getElementById('close-modal');
 const currentArtist = document.getElementById('current-artist');
 const currentTags = document.getElementById('current-tags');
 const currentTimeEl = document.getElementById('current-time');
@@ -119,8 +125,16 @@ function renderSongs() {
                 </div>
             </div>
             <div class="card-info">
-                <h4>${song.title}</h4>
-                <p>${song.singers ? song.singers.join(', ') : ''}</p>
+                <div class="info-text">
+                    <h4>${song.title}</h4>
+                    <p class="singers">${song.singers ? song.singers.join(', ') : ''}</p>
+                    ${song.musicBy ? `<p class="music-by"><i class="fa-solid fa-music"></i> ${song.musicBy}</p>` : ''}
+                </div>
+                ${song.youtube && song.youtube.url ? `
+                <button class="youtube-badge" title="Watch on YouTube" onclick="event.stopPropagation(); openVideoModal('${song.youtube.url}')">
+                    <i class="fa-brands fa-youtube"></i>
+                </button>
+                ` : ''}
             </div>
         `;
         songsGrid.appendChild(card);
@@ -276,8 +290,9 @@ function formatTime(seconds) {
 
 // Helper to get consistent album/movie name
 function getAlbumName(song) {
-    if (song.movie) return song.movie;
+    // if (song.movie) return song.movie;
     if (song.album) return song.album;
+    console.log(song);
 
     // Fallback: Extract from albumImage URL if available
     // e.g., .../AlaVaikunthapurramuloo.jpg -> AlaVaikunthapurramuloo
@@ -293,6 +308,133 @@ function getAlbumName(song) {
     }
 
     return "Unknown Album";
+
+}
+
+
+// Video Modal Logic
+function openVideoModal(url) {
+    // Extract Video ID
+    // Support formats: youtu.be/ID, youtube.com/watch?v=ID, youtube.com/embed/ID
+    let videoId = '';
+
+    // Regex for robust ID extraction
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+    const match = url.match(regExp);
+
+    if (match && match[2].length === 11) {
+        videoId = match[2];
+    } else {
+        console.warn("Could not extract video ID from URL:", url);
+    }
+
+    if (videoId) {
+        console.log("Opening Video Modal for ID:", videoId);
+
+        // constructed YouTube URL
+        const ytUrl = `https://www.youtube.com/watch?v=${videoId}`;
+
+        // Try Max Resolution first (HD)
+        const hdThumb = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
+        const sdThumb = `https://img.youtube.com/vi/${videoId}/sddefault.jpg`;
+        const hqThumb = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+
+        console.log("Attempting to load HD thumbnail:", hdThumb);
+
+        if (videoThumbnail) {
+            videoThumbnail.src = hdThumb;
+
+            // Fallback logic: HD -> SD -> HQ
+            videoThumbnail.onerror = function () {
+                if (this.src === hdThumb) {
+                    console.warn("HD Thumbnail failed, trying SD...");
+                    this.src = sdThumb;
+                } else if (this.src === sdThumb) {
+                    console.warn("SD Thumbnail failed, using HQ fallback.");
+                    this.src = hqThumb;
+                }
+            };
+        } else {
+            console.error("Error: video-thumbnail element not found in DOM");
+        }
+
+        // Set Click Action (Open in New Tab)
+        const openInNewTab = () => window.open(ytUrl, '_blank');
+        videoThumbnail.onclick = openInNewTab;
+        if (thumbnailPlayBtn) thumbnailPlayBtn.onclick = openInNewTab;
+
+        // Set fallback link text/href
+        const fallbackLink = document.getElementById('youtube-fallback');
+        if (fallbackLink) {
+            fallbackLink.href = ytUrl;
+        }
+
+        videoModal.classList.add('active');
+
+        if (isPlaying) togglePlay();
+    }
+}
+// Expose to window for inline HTML onclick
+window.openVideoModal = openVideoModal;
+
+function closeVideoModal() {
+    videoModal.classList.remove('active');
+    videoThumbnail.src = ''; // Clear image
+}
+
+
+
+// Themes Configuration
+const themes = {
+    default: {
+        '--bg-color': '#000000',
+        '--accent-color': '#8a2be2',
+        '--accent-glow': 'rgba(138, 43, 226, 0.4)',
+        '--blob-1': '#6a00ff',
+        '--blob-2': '#ff0055',
+        '--blob-3': '#00e5ff'
+    },
+    ocean: {
+        '--bg-color': '#001a1a',
+        '--accent-color': '#00bfff',
+        '--accent-glow': 'rgba(0, 191, 255, 0.4)',
+        '--blob-1': '#00ced1', // Dark Turquoise
+        '--blob-2': '#1e90ff', // Dodger Blue
+        '--blob-3': '#00008b'  // Dark Blue
+    },
+    sunset: {
+        '--bg-color': '#1a0500',
+        '--accent-color': '#ff4500',
+        '--accent-glow': 'rgba(255, 69, 0, 0.4)',
+        '--blob-1': '#ff8c00', // Dark Orange
+        '--blob-2': '#dc143c', // Crimson
+        '--blob-3': '#800080'  // Purple
+    },
+    forest: {
+        '--bg-color': '#051a05',
+        '--accent-color': '#32cd32',
+        '--accent-glow': 'rgba(50, 205, 50, 0.4)',
+        '--blob-1': '#228b22', // Forest Green
+        '--blob-2': '#00fa9a', // Medium Spring Green
+        '--blob-3': '#556b2f'  // Dark Olive Green
+    },
+    gold: {
+        '--bg-color': '#1a1a00',
+        '--accent-color': '#ffd700',
+        '--accent-glow': 'rgba(255, 215, 0, 0.4)',
+        '--blob-1': '#daa520', // Goldenrod
+        '--blob-2': '#b8860b', // Dark Goldenrod
+        '--blob-3': '#ffd700'  // Gold
+    }
+};
+
+function applyTheme(themeName) {
+    const theme = themes[themeName] || themes.default;
+    const root = document.documentElement;
+
+    Object.keys(theme).forEach(key => {
+        root.style.setProperty(key, theme[key]);
+    });
 }
 
 // Event Listeners
@@ -302,6 +444,17 @@ function setupEventListeners() {
         el.addEventListener('change', applyFilters);
     });
     resetBtn.addEventListener('click', resetFilters);
+
+    // Theme Selector
+    themeSelector.addEventListener('change', (e) => {
+        applyTheme(e.target.value);
+    });
+
+    // Modal
+    closeModalBtn.addEventListener('click', closeVideoModal);
+    videoModal.addEventListener('click', (e) => {
+        if (e.target === videoModal) closeVideoModal();
+    });
 
     // Audio Controls
     playBtn.addEventListener('click', togglePlay);

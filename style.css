@@ -238,12 +238,30 @@ body {
     /* Allow shrinking */
 }
 
-.album-art-thumb {
+.cover-wrapper {
     width: 60px;
     height: 60px;
     border-radius: 8px;
-    object-fit: cover;
+    background: rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    flex-shrink: 0;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+#default-cover-icon {
+    font-size: 24px;
+    color: var(--text-secondary);
+}
+
+.album-art-thumb {
+    width: 100%;
+    height: 100%;
+    border-radius: 0;
+    /* Wrapper handles radius */
+    object-fit: cover;
 }
 
 .track-info-mini h4 {

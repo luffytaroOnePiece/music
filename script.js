@@ -13,6 +13,7 @@ const resetBtn = document.getElementById('reset-filters');
 
 const nowPlayingSection = document.querySelector('.now-playing');
 const currentCover = document.getElementById('current-cover');
+const defaultCoverIcon = document.getElementById('default-cover-icon');
 const currentTitle = document.getElementById('current-title');
 const currentArtist = document.getElementById('current-artist');
 const currentTags = document.getElementById('current-tags');
@@ -177,6 +178,9 @@ function loadSong(song) {
     currentArtist.innerText = song.singers ? song.singers.join(', ') : 'Unknown Artist';
     currentCover.src = song.coverImage;
     currentCover.src = song.coverImage;
+    currentCover.style.display = 'block'; // Show image
+    defaultCoverIcon.style.display = 'none'; // Hide default icon
+
     currentMovie.innerText = getAlbumName(song);
     currentMovie.title = currentMovie.innerText; /* Add tooltip for long names */
     audio.src = song.audioUrl;

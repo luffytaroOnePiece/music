@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Liquid Music</title>
-    <link rel="stylesheet" href="style.css?v=6">
+    <link rel="stylesheet" href="style.css?v=7">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -78,7 +78,10 @@
     <!-- Fixed Bottom Player Bar -->
     <footer class="player-bar glass-panel now-playing">
         <div class="player-left">
-            <img id="current-cover" src="" alt="Album Art" class="album-art-thumb">
+            <div class="cover-wrapper">
+                <i id="default-cover-icon" class="fa-solid fa-music"></i>
+                <img id="current-cover" src="" alt="Album Art" class="album-art-thumb" style="display: none;">
+            </div>
             <div class="track-info-mini">
                 <h4 id="current-title">Select a Song</h4>
                 <p id="current-artist">--</p>

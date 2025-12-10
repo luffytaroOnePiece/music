@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liquid Music</title>
+    <link rel="stylesheet" href="style.css?v=6">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <div class="liquid-bg">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <div class="app-container">
+        <!-- Main Content (Songs Grid) -->
+        <main class="main-content">
+            <header class="app-header">
+                <div class="logo">
+                    <i class="fa-solid fa-music"></i> <span>Liquid<span class="highlight">Beats</span></span>
+                </div>
+            </header>
+
+            <section class="song-list-section">
+                <!-- <h2>Library</h2> -->
+                <div class="songs-grid" id="songs-grid">
+                    <!-- Cards injected by JS -->
+                </div>
+            </section>
+        </main>
+
+        <!-- Sidebar / Filter Panel (Right Side) -->
+        <aside class="sidebar glass-panel">
+            <div class="filter-section">
+                <h3>Filters <button id="reset-filters" class="icon-btn" title="Reset Filters"><i
+                            class="fa-solid fa-rotate-right"></i></button></h3>
+                <div class="filter-group">
+                    <label>Language</label>
+                    <select id="filter-language">
+                        <option value="">All</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Genre</label>
+                    <select id="filter-genre">
+                        <option value="">All</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Year</label>
+                    <select id="filter-year">
+                        <option value="">All</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Singer</label>
+                    <select id="filter-singer">
+                        <option value="">All</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Composer</label>
+                    <select id="filter-musicBy">
+                        <option value="">All</option>
+                    </select>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Fixed Bottom Player Bar -->
+    <footer class="player-bar glass-panel now-playing">
+        <div class="player-left">
+            <img id="current-cover" src="" alt="Album Art" class="album-art-thumb">
+            <div class="track-info-mini">
+                <h4 id="current-title">Select a Song</h4>
+                <p id="current-artist">--</p>
+                <div id="current-tags" style="display:none;"></div>
+                <!-- Hidden in footer for clean look, or show minimal -->
+            </div>
+        </div>
+
+        <div class="player-center">
+            <div class="volume-controls">
+                <i class="fa-solid fa-volume-high"></i>
+                <input type="range" id="volume-slider" min="0" max="1" step="0.1" value="1">
+            </div>
+            <div class="progress-area">
+                <span id="current-time">0:00</span>
+                <div class="progress-bar-wrapper" id="progress-container">
+                    <div class="progress-bar" id="progress-bar"></div>
+                </div>
+                <span id="total-duration">0:00</span>
+            </div>
+        </div>
+
+        <div class="player-right">
+            <div class="playback-controls">
+                <button id="prev-btn" class="control-btn"><i class="fa-solid fa-backward-step"></i></button>
+                <button id="play-btn" class="control-btn play-btn-bar"><i class="fa-solid fa-play"></i></button>
+                <button id="next-btn" class="control-btn"><i class="fa-solid fa-forward-step"></i></button>
+            </div>
+            <p id="current-movie" class="movie-name">--</p>
+        </div>
+    </footer>
+
+    <!-- Youtube Modal (hidden by default) -->
+    <div id="yt-modal" class="modal">
+        <div class="modal-content glass-panel">
+            <span class="close-modal">&times;</span>
+            <div id="yt-player-container"></div>
+        </div>
+    </div>
+
+    <script type="module" src="script.js"></script>
+</body>
+
+</html>

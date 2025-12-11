@@ -57,7 +57,14 @@ function updateStyleToggleUI(style) {
     });
 }
 
+const BATCH_SIZE = 24;
+let renderObserver;
+
 function renderSongsList(songs) {
+    if (renderObserver) {
+        renderObserver.disconnect();
+    }
+
     songsGrid.innerHTML = '';
     // Apply grid or list class
     songsGrid.className = state.displayStyle === 'list' ? 'songs-list' : 'songs-grid';
@@ -68,37 +75,76 @@ function renderSongsList(songs) {
         return;
     }
 
-    songs.forEach(song => {
-        const isActive = state.currentSongIndex !== -1 && state.songsData[state.currentSongIndex].id === song.id;
+    let renderedCount = 0;
 
-        const card = document.createElement('div');
-        card.className = `song-card ${isActive ? 'active-song' : ''}`;
-        card.dataset.id = song.id;
+    function appendBatch(startIndex) {
+        const batch = songs.slice(startIndex, startIndex + BATCH_SIZE);
+        batch.forEach(song => {
+            const isActive = state.currentSongIndex !== -1 && state.songsData[state.currentSongIndex].id === song.id;
+            const card = createSongCard(song, isActive);
+            songsGrid.appendChild(card);
+        });
+        renderedCount += batch.length;
+    }
 
-        card.onclick = () => window.loadAndPlaySongById(song.id);
+    // Initial load
+    appendBatch(0);
 
-        card.innerHTML = `
-            <div class="card-img">
-                <img src="${song.coverImage}" alt="${song.title}" loading="lazy">
-                <div class="play-overlay">
-                    <i class="fa-solid ${isActive && state.isPlaying ? 'fa-pause' : 'fa-play'}"></i>
-                </div>
+    // Setup Infinite Scroll
+    if (songs.length > renderedCount) {
+        const sentinel = document.createElement('div');
+        sentinel.style.height = '20px';
+        sentinel.style.width = '100%';
+        songsGrid.appendChild(sentinel);
+
+        renderObserver = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting) {
+                // Remove sentinel temporarily to append items
+                sentinel.remove();
+
+                appendBatch(renderedCount);
+
+                // Add sentinel back if more items exist
+                if (renderedCount < songs.length) {
+                    songsGrid.appendChild(sentinel);
+                } else {
+                    renderObserver.disconnect();
+                }
+            }
+        }, { rootMargin: '200px' });
+
+        renderObserver.observe(sentinel);
+    }
+}
+
+function createSongCard(song, isActive) {
+    const card = document.createElement('div');
+    card.className = `song-card ${isActive ? 'active-song' : ''}`;
+    card.dataset.id = song.id;
+
+    card.onclick = () => window.loadAndPlaySongById(song.id);
+
+    card.innerHTML = `
+        <div class="card-img">
+            <img src="${song.coverImage}" alt="${song.title}" loading="lazy">
+            <div class="play-overlay">
+                <i class="fa-solid ${isActive && state.isPlaying ? 'fa-pause' : 'fa-play'}"></i>
             </div>
-            <div class="card-info">
-                <div class="info-text">
-                    <h4>${song.title}</h4>
-                    <p class="singers">${song.singers ? song.singers.join(', ') : ''}</p>
-                    ${song.musicBy ? `<p class="music-by"><i class="fa-solid fa-music"></i> ${song.musicBy}</p>` : ''}
-                </div>
-                ${song.youtube && song.youtube.url ? `
-                <button class="youtube-badge" title="Watch on YouTube" onclick="event.stopPropagation(); window.openVideoModal('${song.youtube.url}')">
-                    <i class="fa-brands fa-youtube"></i>
-                </button>
-                ` : ''}
+        </div>
+        <div class="card-info">
+            <div class="info-text">
+                <h4>${song.title}</h4>
+                <p class="singers">${song.singers ? song.singers.join(', ') : ''}</p>
+                ${song.musicBy ? `<p class="music-by"><i class="fa-solid fa-music"></i> ${song.musicBy}</p>` : ''}
             </div>
-        `;
-        songsGrid.appendChild(card);
-    });
+            ${song.youtube && song.youtube.url ? `
+            <button class="youtube-badge" title="Watch on YouTube" onclick="event.stopPropagation(); window.openVideoModal('${song.youtube.url}')">
+                <i class="fa-brands fa-youtube"></i>
+            </button>
+            ` : ''}
+        </div>
+    `;
+    return card;
 }
 
 function renderAlbums() {

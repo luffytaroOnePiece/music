@@ -46,6 +46,7 @@ body {
     filter: blur(80px);
     opacity: 0.6;
     animation: move 20s infinite alternate;
+    will-change: transform;
 }
 
 .blob-1 {

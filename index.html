@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Liquid Music</title>
-    <link rel="stylesheet" href="style.css?v=37">
+    <link rel="stylesheet" href="style.css?v=41">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -24,12 +24,16 @@
         <main class="main-content">
             <header class="app-header">
                 <div class="logo">
-                    <span class="highlight">Liquid</span> Music 🎵
+                    <i class="fa-solid fa-music highlight"></i> Liquid Music
+                </div>
+
+                <div class="search-container">
+                    <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                    <input type="text" id="search-input" placeholder="Search Song or Album...">
                 </div>
             </header>
 
             <section class="song-list-section">
-                <!-- <h2>Library</h2> -->
                 <div class="songs-grid" id="songs-grid">
                     <!-- Cards injected by JS -->
                 </div>
@@ -157,7 +161,8 @@
         </div>
     </div>
 
-    <script type="module" src="script.js"></script>
+    <!-- Main Script (Module) -->
+    <script type="module" src="js/main.js"></script>
 </body>
 
 </html>

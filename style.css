@@ -129,15 +129,8 @@ body {
     box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
 }
 
-.logo {
-    font-size: 24px;
-    font-weight: 700;
-    margin-bottom: 40px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
+/* Logo and Search Styles moved to .app-header section */
+/* Keeping Highlight class generic */
 .highlight {
     color: #ff00de;
     background: linear-gradient(to right, #ff00de, #00e5ff);
@@ -208,11 +201,81 @@ body {
 .app-header {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-start;
+    /* items start from left */
+    gap: 40px;
+    /* Space between logo and search */
     margin-bottom: 10px;
+    padding: 10px 0;
 }
 
-/* Player Bar (Footer) */
+.logo {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 0;
+    /* Reset margin */
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    white-space: nowrap;
+}
+
+/* Search Bar */
+.search-container {
+    position: relative;
+    margin-bottom: 0;
+    /* Reset margin */
+    flex: 0 1 500px;
+    /* Flex basis with grow/shrink limits */
+    max-width: 600px;
+}
+
+/* Center search logic: 
+   If we want it perfectly centered in the header processing 2 items (Logo, Search),
+   we can use margin-left: auto; margin-right: auto; on the search container?
+   Or justify-content: space-between if we had a 3rd item.
+   For now, "Middle of top" implies center of the available space or center relative to screen.
+   Let's try to center it relative to the header space remaining.
+*/
+.search-container {
+    flex: 1;
+    max-width: 500px;
+    margin: 0 auto;
+    /* This centers it in the flex space if justify-content allows */
+}
+
+/* But if justify-content is flex-start, margin: 0 auto works to push it away from neighbors? 
+   Actually, `margin-left: auto; margin-right: auto;` in a flex container 
+   will consume available space. 
+   Since Logo is on left, margin-left: auto will push Search to right. 
+   To center strictly, we might need a spacer or absolute positioning.
+   Let's stick to a simple clean layout first: Logo Left, Search acts as a central block.
+*/
+
+.search-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-secondary);
+    pointer-events: none;
+}
+
+#search-input {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.08);
+    /* Slightly clearer in header */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    /* More rounded for header bar look? */
+    padding: 12px 12px 12px 45px;
+    color: white;
+    font-family: inherit;
+    font-size: 15px;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
 .player-bar {
     position: fixed;
     bottom: 0;

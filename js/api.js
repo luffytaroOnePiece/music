@@ -5,8 +5,8 @@ function getTimestampVersion() {
   return Date.now();
 }
 
-const FILTERS_URL = `https://cdn.jsdelivr.net/gh/luffytaroOnePiece/gists@latest/music/filters.json?v=${getTimestampVersion()}`;
-const METADATA_URL = `https://cdn.jsdelivr.net/gh/luffytaroOnePiece/gists@latest/music/metadata.json?v=${getTimestampVersion()}`;
+const FILTERS_URL = `https://cdn.jsdelivr.net/gh/luffytaroOnePiece/gists@main/music/filters.json?v=${getTimestampVersion()}`;
+const METADATA_URL = `https://cdn.jsdelivr.net/gh/luffytaroOnePiece/gists@main/music/metadata.json?v=${getTimestampVersion()}`;
 
 export async function fetchData() {
   const [filtersResponse, metadataResponse] = await Promise.all([

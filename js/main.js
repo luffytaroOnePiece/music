@@ -1,6 +1,6 @@
 // Main Entry Point
 import { fetchData } from './api.js';
-import { populateFilters, renderSongs, applyFilters, resetFilters } from './ui.js';
+import { populateFilters, renderSongs, applyFilters, resetFilters, handleViewToggle } from './ui.js';
 import { applyTheme } from './theme.js';
 import {
     loadAndPlaySongById,
@@ -30,6 +30,7 @@ const filterYear = document.getElementById('filter-year');
 const filterSinger = document.getElementById('filter-singer');
 const filterMusicBy = document.getElementById('filter-musicBy');
 const searchInput = document.getElementById('search-input'); // Search input
+const viewToggleBtns = document.querySelectorAll('.view-toggle-btn'); // Toggle buttons
 
 // Initialize
 async function init() {
@@ -47,6 +48,13 @@ async function init() {
 
 // Event Listeners
 function setupEventListeners() {
+    // View Toggles
+    viewToggleBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            handleViewToggle(btn.dataset.view);
+        });
+    });
+
     // Filters
     [filterLanguage, filterGenre, filterYear, filterSinger, filterMusicBy].forEach(el => {
         el.addEventListener('change', applyFilters);
@@ -89,6 +97,7 @@ function setupEventListeners() {
 function exposeGlobals() {
     window.loadAndPlaySongById = loadAndPlaySongById;
     window.openVideoModal = openVideoModal;
+    window.goBackToAlbums = () => handleViewToggle('albums');
 }
 
 // Start

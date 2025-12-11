@@ -28,24 +28,38 @@ function populateSelect(element, options) {
     });
 }
 
-export function renderSongs() {
-    songsGrid.innerHTML = '';
+// View Switching Logic
+export function render() {
+    if (state.viewMode === 'songs') {
+        renderSongsList(state.visibleSongs);
+    } else if (state.viewMode === 'albums') {
+        renderAlbums();
+    } else if (state.viewMode === 'album_detail') {
+        renderAlbumDetail();
+    }
+}
 
-    if (state.visibleSongs.length === 0) {
+export function renderSongs() {
+    // Legacy support or alias to render()
+    render();
+}
+
+function renderSongsList(songs) {
+    songsGrid.innerHTML = '';
+    songsGrid.className = 'songs-grid'; // Reset class for grid layout
+
+    if (songs.length === 0) {
         songsGrid.innerHTML = '<p style="color:#aaa; grid-column: 1/-1; text-align:center;">No songs match your filters.</p>';
         return;
     }
 
-    state.visibleSongs.forEach(song => {
+    songs.forEach(song => {
         const isActive = state.currentSongIndex !== -1 && state.songsData[state.currentSongIndex].id === song.id;
 
         const card = document.createElement('div');
         card.className = `song-card ${isActive ? 'active-song' : ''}`;
         card.dataset.id = song.id;
 
-        // Note: onclick handlers are attached via string here.
-        // For this to work with modules, the functions (loadAndPlaySongById, openVideoModal)
-        // MUST be attached to the window object in main.js.
         card.onclick = () => window.loadAndPlaySongById(song.id);
 
         card.innerHTML = `
@@ -69,6 +83,133 @@ export function renderSongs() {
             </div>
         `;
         songsGrid.appendChild(card);
+    });
+}
+
+function renderAlbums() {
+    songsGrid.innerHTML = '';
+    songsGrid.className = 'albums-grid'; // Different grid style if needed
+
+    // Group songs by album
+    const albums = {};
+    state.visibleSongs.forEach(song => {
+        const albumName = getAlbumName(song);
+        if (!albums[albumName]) {
+            albums[albumName] = {
+                name: albumName,
+                cover: song.albumImage || song.coverImage,
+                songs: []
+            };
+        }
+        albums[albumName].songs.push(song);
+    });
+
+    const albumList = Object.values(albums);
+
+    if (albumList.length === 0) {
+        songsGrid.innerHTML = '<p style="color:#aaa; grid-column: 1/-1; text-align:center;">No albums found.</p>';
+        return;
+    }
+
+    albumList.forEach(album => {
+        const card = document.createElement('div');
+        card.className = 'album-card';
+        card.onclick = () => {
+            state.viewMode = 'album_detail';
+            state.currentAlbum = album.name;
+            render();
+            // Update Toggle Button State manually or re-render header if it was dynamic
+        };
+
+        card.innerHTML = `
+            <div class="card-img">
+                <img src="${album.cover}" alt="${album.name}" loading="lazy">
+                 <div class="play-overlay">
+                    <i class="fa-solid fa-folder-open"></i>
+                </div>
+            </div>
+            <div class="card-info">
+                <h4>${album.name}</h4>
+                <p>${album.songs.length} Songs</p>
+            </div>
+        `;
+        songsGrid.appendChild(card);
+    });
+}
+
+function renderAlbumDetail() {
+    songsGrid.innerHTML = '';
+    songsGrid.className = 'songs-grid';
+
+    // Show Back Button Header
+    const header = document.createElement('div');
+    header.style.gridColumn = '1 / -1';
+    header.style.marginBottom = '20px';
+    header.innerHTML = `
+        <button class="icon-btn" onclick="window.goBackToAlbums()">
+            <i class="fa-solid fa-arrow-left"></i> Back to Albums
+        </button>
+        <h2 style="display:inline-block; margin-left: 10px;">${state.currentAlbum}</h2>
+    `;
+    songsGrid.appendChild(header);
+
+    // Filter songs for this album
+    const albumSongs = state.songsData.filter(s => getAlbumName(s) === state.currentAlbum);
+
+    // Use the existing list renderer but append instead of clearing (since we added header)
+    // Actually simpler to just reuse logic but we need to append to the container which we just cleared.
+    // Let's manually render the list part to avoid clearing the header.
+
+    // Alternatively, filter visibleSongs temporarily? No, standard practice is to show all songs in that album regardless of current filters, OR respect filters.
+    // User probably expects "Show me this album", so we should show all songs in it.
+    // But let's check if visibleSongs is already filtered. If we use state.songsData, we ignore filters.
+    // Use state.songsData for "All songs in album".
+
+    if (albumSongs.length === 0) {
+        const msg = document.createElement('p');
+        msg.textContent = "No songs found.";
+        songsGrid.appendChild(msg);
+        return;
+    }
+
+    albumSongs.forEach(song => {
+        const isActive = state.currentSongIndex !== -1 && state.songsData[state.currentSongIndex].id === song.id;
+
+        const card = document.createElement('div');
+        card.className = `song-card ${isActive ? 'active-song' : ''}`;
+        card.dataset.id = song.id;
+        card.onclick = () => window.loadAndPlaySongById(song.id);
+
+        card.innerHTML = `
+            <div class="card-img">
+                <img src="${song.coverImage}" alt="${song.title}" loading="lazy">
+                <div class="play-overlay">
+                    <i class="fa-solid ${isActive && state.isPlaying ? 'fa-pause' : 'fa-play'}"></i>
+                </div>
+            </div>
+            <div class="card-info">
+                <div class="info-text">
+                    <h4>${song.title}</h4>
+                    <p class="singers">${song.singers ? song.singers.join(', ') : ''}</p>
+                </div>
+            </div>
+        `;
+        songsGrid.appendChild(card);
+    });
+}
+
+export function handleViewToggle(mode) {
+    state.viewMode = mode;
+    state.currentAlbum = null;
+    render();
+    updateToggleUI(mode);
+}
+
+function updateToggleUI(mode) {
+    // This expects HTML elements to exist. we will add them next.
+    document.querySelectorAll('.view-toggle-btn').forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.dataset.view === mode) btn.classList.add('active');
     });
 }
 

@@ -12,6 +12,7 @@ import {
     setVolume
 } from './player.js';
 import { openVideoModal, closeVideoModal } from './modal.js';
+import { initFullPlayer } from './fullPlayer.js';
 import { state, audio } from './state.js';
 
 // DOM Elements
@@ -40,6 +41,7 @@ async function init() {
         populateFilters();
         renderSongs();
         setupEventListeners();
+        initFullPlayer();
         exposeGlobals(); // Crucial for inline HTML onclicks
     } catch (error) {
         console.error("Failed to initialize app:", error);

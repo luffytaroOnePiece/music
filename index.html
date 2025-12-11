@@ -173,6 +173,85 @@
         </div>
     </div>
 
+    <!-- Full Screen Player Modal -->
+    <div id="full-player-modal" class="full-player-modal">
+        <div class="full-player-content">
+            <!-- Header (Close Button) -->
+            <div class="full-player-header">
+                <button id="close-full-player" class="icon-btn close-full-player-btn">
+                    <i class="fa-solid fa-chevron-down"></i>
+                </button>
+                <div class="playing-from">
+                    <span>Playing from playlist</span>
+                    <span id="fp-playlist-name">Liquid Music</span>
+                </div>
+                <button class="icon-btn" title="More Options">
+                    <i class="fa-solid fa-ellipsis"></i>
+                </button>
+            </div>
+
+            <!-- Main Art -->
+            <div class="full-player-art">
+                <div class="fp-art-wrapper">
+                    <img id="fp-art" src="" alt="Album Art">
+                </div>
+            </div>
+
+            <!-- Track Info -->
+            <div class="full-player-track-info">
+                <div class="fp-text">
+                    <h2 id="fp-title">Song Title</h2>
+                    <p id="fp-artist">Artist Name</p>
+                </div>
+                <button class="icon-btn like-btn" title="Like">
+                    <i class="fa-regular fa-heart"></i>
+                </button>
+            </div>
+
+            <!-- Progress -->
+            <div class="full-player-progress">
+                <div class="fp-progress-bar-wrapper" id="fp-progress-container">
+                    <div class="fp-progress-bar" id="fp-progress-bar"></div>
+                </div>
+                <div class="fp-time-labels">
+                    <span id="fp-current-time">0:00</span>
+                    <span id="fp-duration">0:00</span>
+                </div>
+            </div>
+
+            <!-- Controls -->
+            <div class="full-player-controls">
+                <button id="fp-shuffle-btn" class="fp-control-btn icon-btn" title="Shuffle">
+                    <i class="fa-solid fa-shuffle"></i>
+                </button>
+                <button id="fp-prev-btn" class="fp-control-btn main-ctrl">
+                    <i class="fa-solid fa-backward-step"></i>
+                </button>
+                <button id="fp-play-btn" class="fp-control-btn play-pause-large">
+                    <i class="fa-solid fa-play"></i>
+                </button>
+                <button id="fp-next-btn" class="fp-control-btn main-ctrl">
+                    <i class="fa-solid fa-forward-step"></i>
+                </button>
+                <button id="fp-repeat-btn" class="fp-control-btn icon-btn" title="Repeat">
+                    <i class="fa-solid fa-repeat"></i>
+                </button>
+            </div>
+
+            <!-- Bottom Actions -->
+            <div class="full-player-actions">
+                <button class="icon-btn" title="Lyrics"><i class="fa-solid fa-quote-right"></i></button>
+                <button class="icon-btn" title="Queue"><i class="fa-solid fa-list-ul"></i></button>
+            </div>
+        </div>
+
+        <!-- Background Blur Image -->
+        <div class="full-player-bg">
+            <img id="fp-bg-image" src="" alt="">
+            <div class="fp-overlay"></div>
+        </div>
+    </div>
+
     <!-- Main Script (Module) -->
     <script type="module" src="js/main.js"></script>
 </body>

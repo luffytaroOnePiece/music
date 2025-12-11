@@ -1029,7 +1029,9 @@ body {
 
 .fallback-link:hover span {
     text-decoration: underline;
-}/* Full Screen Player */
+}
+
+/* Full Screen Player */
 .full-player-modal {
     position: fixed;
     top: 100%;
@@ -1183,6 +1185,15 @@ body {
     text-overflow: ellipsis;
 }
 
+#fp-music-by {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.5);
+    margin-top: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 .like-btn i {
     font-size: 24px;
     color: rgba(255, 255, 255, 0.7);
@@ -1266,11 +1277,7 @@ body {
     color: rgba(255, 255, 255, 0.7);
 }
 
-#fp-shuffle-btn.active i {
-    color: var(--accent-color);
-    /* Use app accent */
-    text-shadow: 0 0 10px var(--accent-color);
-}
+
 
 .main-ctrl i {
     font-size: 36px;

@@ -9,7 +9,9 @@ import {
     nextSong,
     updateProgress,
     setProgress,
-    setVolume
+
+    setVolume,
+    handleSongEnd
 } from './player.js';
 import { openVideoModal, closeVideoModal } from './modal.js';
 import { initFullPlayer } from './fullPlayer.js';
@@ -94,7 +96,7 @@ function setupEventListeners() {
     nextBtn.addEventListener('click', nextSong);
 
     audio.addEventListener('timeupdate', updateProgress);
-    audio.addEventListener('ended', nextSong);
+    audio.addEventListener('ended', handleSongEnd);
 
     progressContainer.addEventListener('click', setProgress);
 

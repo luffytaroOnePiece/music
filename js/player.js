@@ -146,6 +146,15 @@ export function playRandomSong() {
     playFromVisibleIndex(randomIndex);
 }
 
+export function handleSongEnd() {
+    if (state.isRepeat) {
+        audio.currentTime = 0;
+        playSong();
+    } else {
+        nextSong();
+    }
+}
+
 // Progress Bar Logic
 const progressBar = document.getElementById('progress-bar');
 const currentTimeEl = document.getElementById('current-time');

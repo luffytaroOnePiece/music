@@ -10,6 +10,7 @@ const fpArt = document.getElementById('fp-art');
 const fpBgImage = document.getElementById('fp-bg-image');
 const fpTitle = document.getElementById('fp-title');
 const fpArtist = document.getElementById('fp-artist');
+const fpMusicBy = document.getElementById('fp-music-by');
 const fpPlaylistName = document.getElementById('fp-playlist-name');
 
 const fpProgressContainer = document.getElementById('fp-progress-container');
@@ -71,6 +72,11 @@ function setupEventListeners() {
         handleShuffleToggle();
     });
 
+    fpRepeatBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        handleRepeatToggle();
+    });
+
     // Progress
     fpProgressContainer.addEventListener('click', (e) => {
         const width = fpProgressContainer.clientWidth;
@@ -84,9 +90,12 @@ function setupEventListeners() {
 }
 
 function handleShuffleToggle() {
-    state.isShuffle = !state.isShuffle;
+    // Always enable shuffle when clicking this button (Skip behavior)
+    if (!state.isShuffle) {
+        state.isShuffle = true;
+    }
 
-    // Update main shuffle btn if it exists (sync)
+    // Update main shuffle btn if it exists
     const mainShuffleBtn = document.getElementById('shuffle-btn');
     if (mainShuffleBtn) {
         mainShuffleBtn.classList.toggle('active', state.isShuffle);
@@ -95,9 +104,13 @@ function handleShuffleToggle() {
     // Update local shuffle btn
     updateShuffleUI();
 
-    if (state.isShuffle) {
-        playRandomSong();
-    }
+    // Always play random song
+    playRandomSong();
+}
+
+function handleRepeatToggle() {
+    state.isRepeat = !state.isRepeat;
+    updateRepeatUI();
 }
 
 export function openFullPlayer() {
@@ -121,6 +134,14 @@ export function updateFullPlayerUI() {
     // Text
     fpTitle.innerText = song.title;
     fpArtist.innerText = song.singers ? song.singers.join(', ') : 'Unknown Artist';
+
+    if (song.musicBy) {
+        fpMusicBy.innerText = `ᯓ‎𝄞 ˎˊ˗ ${song.musicBy}`;
+        fpMusicBy.style.display = 'block';
+    } else {
+        fpMusicBy.style.display = 'none';
+    }
+
     fpPlaylistName.innerText = getAlbumName(song);
 
     // Images
@@ -132,6 +153,9 @@ export function updateFullPlayerUI() {
 
     // Shuffle UI Sync
     updateShuffleUI();
+
+    // Repeat UI Sync
+    updateRepeatUI();
 }
 
 export function updateFullPlayerPlayBtn() {
@@ -140,6 +164,10 @@ export function updateFullPlayerPlayBtn() {
 
 function updateShuffleUI() {
     fpShuffleBtn.classList.toggle('active', state.isShuffle);
+}
+
+function updateRepeatUI() {
+    fpRepeatBtn.classList.toggle('active', state.isRepeat);
 }
 
 export function syncFullPlayerProgress(currentTime, duration) {

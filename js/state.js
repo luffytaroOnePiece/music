@@ -5,6 +5,7 @@ export const state = {
     filters: {},
     currentSongIndex: -1,
     isPlaying: false,
+    isRepeat: false,
     viewMode: 'songs', // 'songs', 'albums', 'album_detail'
     displayStyle: 'grid', // 'grid', 'list'
     currentAlbum: null,

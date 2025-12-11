@@ -44,11 +44,26 @@ export function renderSongs() {
     render();
 }
 
+export function handleDisplayStyleToggle(style) {
+    state.displayStyle = style;
+    render();
+    updateStyleToggleUI(style);
+}
+
+function updateStyleToggleUI(style) {
+    document.querySelectorAll('.style-toggle-btn').forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.dataset.style === style) btn.classList.add('active');
+    });
+}
+
 function renderSongsList(songs) {
     songsGrid.innerHTML = '';
-    songsGrid.className = 'songs-grid'; // Reset class for grid layout
+    // Apply grid or list class
+    songsGrid.className = state.displayStyle === 'list' ? 'songs-list' : 'songs-grid';
 
     if (songs.length === 0) {
+        // preserve grid-column span for message
         songsGrid.innerHTML = '<p style="color:#aaa; grid-column: 1/-1; text-align:center;">No songs match your filters.</p>';
         return;
     }
@@ -88,7 +103,8 @@ function renderSongsList(songs) {
 
 function renderAlbums() {
     songsGrid.innerHTML = '';
-    songsGrid.className = 'albums-grid'; // Different grid style if needed
+    // Apply grid or list class
+    songsGrid.className = state.displayStyle === 'list' ? 'albums-list' : 'albums-grid';
 
     // Group songs by album
     const albums = {};
@@ -139,7 +155,8 @@ function renderAlbums() {
 
 function renderAlbumDetail() {
     songsGrid.innerHTML = '';
-    songsGrid.className = 'songs-grid';
+    // Apply grid or list class
+    songsGrid.className = state.displayStyle === 'list' ? 'songs-list' : 'songs-grid';
 
     // Show Back Button Header
     const header = document.createElement('div');

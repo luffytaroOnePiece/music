@@ -787,6 +787,149 @@ body {
     }
 }
 
+/* Style Toggle Logic */
+.style-toggle-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    padding: 8px 12px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.style-toggle-btn.active {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+.style-toggle-btn:hover:not(.active) {
+    color: white;
+}
+
+/* List View Styles */
+.songs-list {
+    display: flex;
+    flex-direction: column;
+    /* Stack vertically */
+    gap: 10px;
+}
+
+.songs-list .song-card {
+    display: flex;
+    /* Horizontal layout */
+    align-items: center;
+    padding: 10px;
+    gap: 15px;
+    border-radius: 12px;
+    height: 80px;
+    /* Fixed height for clean list look */
+}
+
+.songs-list .song-card:hover {
+    transform: none;
+    /* Disable zoom/lift on list items for cleaner feel, or keep small */
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.songs-list .card-img {
+    width: 60px;
+    height: 60px;
+    border-radius: 8px;
+    margin-bottom: 0;
+    /* Clear bottom margin from grid view */
+    flex-shrink: 0;
+}
+
+.songs-list .card-img img {
+    border-radius: 8px;
+}
+
+/* Fix hover zoom in list view if desired, or disable */
+.songs-list .song-card:hover .card-img img {
+    transform: none;
+}
+
+.songs-list .card-info {
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-align: left;
+}
+
+/* Adjust info text layout in list */
+.songs-list .info-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.songs-list .info-text h4 {
+    font-size: 16px;
+    margin-bottom: 2px;
+}
+
+.songs-list .info-text .singers {
+    font-size: 14px;
+}
+
+.songs-list .youtube-badge {
+    width: 28px;
+    height: 28px;
+    font-size: 14px;
+}
+
+/* Play Overlay in List */
+.songs-list .play-overlay i {
+    font-size: 24px;
+    /* Smaller icon */
+}
+
+/* Album List View Styles */
+.albums-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.albums-list .album-card {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    gap: 20px;
+    border-radius: 12px;
+    height: 90px;
+}
+
+.albums-list .album-card:hover {
+    transform: none;
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.albums-list .card-img {
+    width: 70px;
+    height: 70px;
+    border-radius: 8px;
+    margin-bottom: 0;
+    flex-shrink: 0;
+}
+
+.albums-list .card-info {
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-align: left;
+}
+
+.albums-list .album-card h4 {
+    margin-bottom: 2px;
+    font-size: 16px;
+}
+
+
 /* Video Modal */
 .modal-overlay {
     position: fixed;

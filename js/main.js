@@ -1,6 +1,6 @@
 // Main Entry Point
 import { fetchData } from './api.js';
-import { populateFilters, renderSongs, applyFilters, resetFilters, handleViewToggle } from './ui.js';
+import { populateFilters, renderSongs, applyFilters, resetFilters, handleViewToggle, handleDisplayStyleToggle } from './ui.js';
 import { applyTheme } from './theme.js';
 import {
     loadAndPlaySongById,
@@ -31,6 +31,7 @@ const filterSinger = document.getElementById('filter-singer');
 const filterMusicBy = document.getElementById('filter-musicBy');
 const searchInput = document.getElementById('search-input'); // Search input
 const viewToggleBtns = document.querySelectorAll('.view-toggle-btn'); // Toggle buttons
+const styleToggleBtns = document.querySelectorAll('.style-toggle-btn'); // Grid/List Toggle
 
 // Initialize
 async function init() {
@@ -52,6 +53,13 @@ function setupEventListeners() {
     viewToggleBtns.forEach(btn => {
         btn.addEventListener('click', () => {
             handleViewToggle(btn.dataset.view);
+        });
+    });
+
+    // Style Toggle (Grid/List)
+    styleToggleBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            handleDisplayStyleToggle(btn.dataset.style);
         });
     });
 

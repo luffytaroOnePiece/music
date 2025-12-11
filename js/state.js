@@ -6,6 +6,7 @@ export const state = {
     currentSongIndex: -1,
     isPlaying: false,
     viewMode: 'songs', // 'songs', 'albums', 'album_detail'
+    displayStyle: 'grid', // 'grid', 'list'
     currentAlbum: null,
 };
 
